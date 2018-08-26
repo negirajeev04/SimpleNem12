@@ -44,19 +44,9 @@ public class SimpleNem12ParserImpl implements SimpleNem12Parser {
 		}
 
 		/*
-		 * Format the csv stream to add NemId at the end of each 300 record
-		 */
-		final String[] lastNemId = new String[1];
-		Stream<String> formattedStream = streamSupplier.get().peek(str -> {
-			if (str.startsWith("200")) {
-				lastNemId[0] = str.split(",")[1];
-			}
-		}).map(str -> str.startsWith("300") ? str+","+lastNemId[0] : str);
-		
-		/*
 		 * Create MeterRead for each 200 and MeterVolumes for each 300
 		 */
-		formattedStream.forEach((str) -> {
+		streamSupplier.get().forEach((str) -> {
 			
 			if (str.startsWith("200")) {
 				String[] splits200 = str.split(",");
